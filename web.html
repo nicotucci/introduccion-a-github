@@ -1,0 +1,1466 @@
+
+
+Write the exercises HTML file
+bash
+
+cat > /mnt/user-data/outputs/apunte_ejercicios_resueltos.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejercicios Resueltos — Análisis de Inversiones</title>
+<style>
+  :root {
+    --ink: #1C1B18;
+    --ink-soft: #3D3C38;
+    --ink-muted: #6B6960;
+    --paper: #FAFAF7;
+    --paper-warm: #F4F2EB;
+    --paper-mid: #EAE8DF;
+    --line: #D6D3C8;
+    --line-soft: #E8E6DE;
+
+    --blue: #1A5C9E;
+    --blue-light: #EAF2FB;
+    --blue-mid: #3576B8;
+    --blue-dark: #0D3A65;
+
+    --green: #2E6B23;
+    --green-light: #EAF5E7;
+    --green-mid: #4A8E3F;
+    --green-dark: #1A4015;
+
+    --red: #8B2020;
+    --red-light: #FAEAEA;
+    --red-mid: #B83535;
+
+    --amber: #7A4C0A;
+    --amber-light: #FDF3E0;
+    --amber-mid: #C07A18;
+
+    --purple: #4A3BA8;
+    --purple-light: #EDEBFB;
+    --purple-dark: #2B2270;
+
+    --teal: #1A6B5A;
+    --teal-light: #E5F5F1;
+    --teal-dark: #0E4035;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--ink);
+    background: var(--paper-warm);
+    max-width: 940px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+  }
+
+  /* ─── PORTADA ─── */
+  .portada {
+    background: var(--ink);
+    padding: 64px 56px 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .portada::after {
+    content: 'EJERCICIOS';
+    position: absolute;
+    bottom: -20px; right: -8px;
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.04);
+    font-family: 'Georgia', serif;
+    letter-spacing: -4px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .portada .tag {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .portada .tag::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+  .portada h1 {
+    font-size: 42px;
+    font-weight: normal;
+    line-height: 1.2;
+    color: white;
+    margin-bottom: 12px;
+  }
+  .portada h1 em {
+    font-style: normal;
+    color: rgba(255,255,255,0.45);
+    font-size: 36px;
+  }
+  .portada .bajada {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 36px;
+    max-width: 560px;
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .portada .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .portada .chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.7);
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── ÍNDICE ─── */
+  .indice {
+    background: var(--paper);
+    border-bottom: 2px solid var(--line);
+    padding: 32px 56px;
+  }
+  .indice-titulo {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 18px;
+  }
+  .indice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 32px;
+  }
+  .indice-item {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 14px;
+    padding: 4px 0;
+    border-bottom: 1px dotted var(--line);
+  }
+  .indice-item a { color: var(--blue); text-decoration: none; }
+  .indice-item a:hover { text-decoration: underline; }
+  .indice-item .num {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    min-width: 20px;
+  }
+
+  /* ─── CONTENIDO ─── */
+  .contenido { background: var(--paper); padding: 56px 56px; }
+
+  /* ─── BLOQUE EJERCICIO ─── */
+  .ejercicio-bloque {
+    margin-bottom: 80px;
+    border-top: 3px solid var(--ink);
+    padding-top: 32px;
+  }
+
+  .ej-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 28px;
+  }
+  .ej-numero {
+    font-family: 'Courier New', monospace;
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--line);
+    line-height: 1;
+    user-select: none;
+  }
+  .ej-meta {}
+  .ej-clase {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+  }
+  .ej-titulo {
+    font-size: 26px;
+    font-weight: normal;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .ej-enunciado {
+    background: var(--paper-warm);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--ink-muted);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  /* ─── PASOS ─── */
+  h3.paso-titulo {
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h3.paso-titulo::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line-soft);
+  }
+
+  p { margin-bottom: 14px; color: var(--ink-soft); }
+  p strong { color: var(--ink); }
+
+  /* ─── DATO / LEER ─── */
+  .identificar-box {
+    background: var(--blue-light);
+    border: 1px solid #C5DCF5;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+  .identificar-box .ib-titulo {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .identificar-box .ib-titulo::before {
+    content: '◆';
+    font-size: 8px;
+  }
+  .dato-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .dato-item {
+    background: white;
+    border: 1px solid #C5DCF5;
+    border-radius: 5px;
+    padding: 8px 12px;
+  }
+  .dato-item .di-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 2px;
+  }
+  .dato-item .di-valor {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--blue-dark);
+    font-family: 'Courier New', monospace;
+  }
+  .dato-item .di-nota {
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+  }
+
+  /* ─── FORMULA STEP ─── */
+  .formula-step {
+    background: #1a2332;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 12px 0;
+    position: relative;
+  }
+  .formula-step .fs-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 6px;
+  }
+  .formula-step .fs-formula {
+    font-family: 'Courier New', monospace;
+    font-size: 17px;
+    color: #a8d8f0;
+    letter-spacing: 0.5px;
+  }
+  .formula-step .fs-sustitucion {
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    color: #b8e0a8;
+    margin-top: 6px;
+  }
+  .formula-step .fs-resultado {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    color: #ffd98e;
+    margin-top: 6px;
+    font-weight: bold;
+  }
+
+  /* ─── RESULTADO FINAL ─── */
+  .resultado-final {
+    background: var(--green-light);
+    border: 2px solid var(--green-mid);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .resultado-final .rf-valor {
+    font-family: 'Courier New', monospace;
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--green);
+    white-space: nowrap;
+  }
+  .resultado-final .rf-texto {
+    font-size: 14px;
+    color: var(--green-dark);
+    line-height: 1.6;
+  }
+  .resultado-final.negativo {
+    background: var(--red-light);
+    border-color: var(--red-mid);
+  }
+  .resultado-final.negativo .rf-valor { color: var(--red); }
+  .resultado-final.negativo .rf-texto { color: #4A1010; }
+  .resultado-final.neutro {
+    background: var(--amber-light);
+    border-color: var(--amber-mid);
+  }
+  .resultado-final.neutro .rf-valor { color: var(--amber); }
+  .resultado-final.neutro .rf-texto { color: #4A2A05; }
+
+  /* ─── INTERPRETACIÓN ─── */
+  .interpretacion {
+    background: var(--paper-warm);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .interpretacion .int-titulo {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .interpretacion .int-titulo::before { content: '▶ '; font-size: 9px; }
+  .interpretacion p { margin-bottom: 8px; font-size: 14px; }
+  .interpretacion p:last-child { margin-bottom: 0; }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    border-left: 3px solid;
+    font-size: 14px;
+  }
+  .callout .c-titulo {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  .callout p { margin-bottom: 6px; font-size: 14px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout-ojo { background: var(--amber-light); border-color: var(--amber-mid); }
+  .callout-ojo .c-titulo { color: var(--amber); }
+  .callout-ojo p { color: #5A3208; }
+  .callout-variante { background: var(--purple-light); border-color: var(--purple); }
+  .callout-variante .c-titulo { color: var(--purple); }
+  .callout-variante p { color: var(--purple-dark); }
+  .callout-tip { background: var(--teal-light); border-color: var(--teal); }
+  .callout-tip .c-titulo { color: var(--teal); }
+  .callout-tip p { color: var(--teal-dark); }
+  .callout-concepto { background: var(--blue-light); border-color: var(--blue-mid); }
+  .callout-concepto .c-titulo { color: var(--blue); }
+  .callout-concepto p { color: var(--blue-dark); }
+
+  /* ─── CÓDIGO ─── */
+  .codigo-bloque {
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px 0;
+    border: 1px solid var(--line);
+  }
+  .cb-header {
+    background: #252525;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cb-header .cb-titulo { font-size: 12px; color: rgba(255,255,255,0.7); font-family: 'Courier New', monospace; }
+  .cb-header .cb-lang { font-size: 10px; color: rgba(255,255,255,0.3); font-family: 'Courier New', monospace; letter-spacing: 1px; }
+  pre.cb-code {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    padding: 18px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    overflow-x: auto;
+    margin: 0;
+    white-space: pre;
+  }
+  .cb-output {
+    background: #0d1117;
+    border-top: 1px solid #333;
+    padding: 12px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #7ec8a0;
+    line-height: 1.6;
+  }
+  .cb-output::before {
+    content: '▶ Output';
+    display: block;
+    color: rgba(255,255,255,0.2);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .kw { color: #569cd6; } .st { color: #ce9178; } .cm { color: #6a9955; font-style: italic; }
+  .nu { color: #b5cea8; } .fn { color: #dcdcaa; } .bi { color: #4ec9b0; }
+  .op { color: #d4d4d4; } .li { color: #c586c0; }
+
+  /* ─── TABLA ─── */
+  .tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px;
+    font-size: 14px;
+  }
+  .tabla-datos th {
+    background: var(--ink);
+    color: white;
+    padding: 9px 14px;
+    text-align: left;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: normal;
+  }
+  .tabla-datos td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: middle;
+  }
+  .tabla-datos tr:nth-child(even) td { background: var(--paper-warm); }
+  .tabla-datos .td-mono { font-family: 'Courier New', monospace; font-weight: bold; }
+  .verde { color: var(--green); } .rojo { color: var(--red); } .amber { color: var(--amber); }
+
+  /* ─── COMPARACIÓN DE PROYECTOS ─── */
+  .comparacion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0 20px;
+  }
+  .comp-card {
+    border: 2px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .comp-card .cc-header {
+    padding: 10px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: bold;
+  }
+  .comp-card .cc-body { padding: 12px 16px; }
+  .comp-card .cc-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 13px;
+  }
+  .comp-card .cc-fila:last-child { border-bottom: none; }
+  .comp-card .cc-fila .cf-label { color: var(--ink-muted); }
+  .comp-card .cc-fila .cf-val { font-family: 'Courier New', monospace; font-weight: bold; }
+  .card-a { border-color: var(--blue-mid); }
+  .card-a .cc-header { background: var(--blue-light); color: var(--blue-dark); }
+  .card-b { border-color: var(--purple); }
+  .card-b .cc-header { background: var(--purple-light); color: var(--purple-dark); }
+
+  /* ─── VARIANTES SECTION ─── */
+  .variantes-bloque {
+    background: var(--purple-light);
+    border: 1px solid #C0BAF5;
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 28px 0 0;
+  }
+  .variantes-bloque .vb-titulo {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .variantes-bloque .vb-titulo::before { content: '◇'; }
+  .variante-item {
+    background: white;
+    border: 1px solid #C0BAF5;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .variante-item:last-child { margin-bottom: 0; }
+  .variante-item .vi-pregunta {
+    font-size: 14px;
+    color: var(--purple-dark);
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  .variante-item .vi-respuesta { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .variante-item .vi-formula {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--purple);
+    background: var(--purple-light);
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin: 6px 0;
+    display: inline-block;
+  }
+
+  /* ─── SEPARADOR ─── */
+  hr.sep { border: none; border-top: 1px solid var(--line); margin: 48px 0; }
+
+  /* ─── FOOTER ─── */
+  .pie {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    padding: 24px 56px;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 680px) {
+    body { font-size: 15px; }
+    .portada, .contenido, .indice, .pie { padding-left: 24px; padding-right: 24px; }
+    .portada h1 { font-size: 28px; }
+    .indice-grid { grid-template-columns: 1fr; }
+    .comparacion-grid { grid-template-columns: 1fr; }
+    .dato-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="portada">
+  <div class="tag">Laboratorio de Métodos Cuantitativos · Clases 16 y 17</div>
+  <h1>Ejercicios Resueltos<br><em>Análisis de Inversiones con Python</em></h1>
+  <p class="bajada">Resolución paso a paso de todos los ejercicios propuestos en clase, con identificación del método, sustitución de fórmulas, interpretación económica y variantes posibles que podrían pedirse.</p>
+  <div class="chips">
+    <span class="chip">Equivalencia de tasas</span>
+    <span class="chip">Proporción</span>
+    <span class="chip">Valor presente</span>
+    <span class="chip">VAN</span>
+    <span class="chip">TIR / TIRM</span>
+    <span class="chip">IR · PRS · PRD</span>
+  </div>
+</div>
+
+<!-- ÍNDICE -->
+<div class="indice">
+  <div class="indice-titulo">Índice de ejercicios</div>
+  <div class="indice-grid">
+    <div class="indice-item"><span class="num">1</span><a href="#ej1">Anualizar inflación semestral (IPC)</a></div>
+    <div class="indice-item"><span class="num">2</span><a href="#ej2">TNA 48% → TEM y TEA</a></div>
+    <div class="indice-item"><span class="num">3</span><a href="#ej3">VAN de proyecto de inversión</a></div>
+    <div class="indice-item"><span class="num">4</span><a href="#ej4">Obligación Negociable de Edenor</a></div>
+    <div class="indice-item"><span class="num">5</span><a href="#ej5">Proyecto completo (VAN, TIR, TIRM, IR, PRS, PRD)</a></div>
+    <div class="indice-item"><span class="num">6</span><a href="#ej6">Proyecto no rentable — análisis e interpretación</a></div>
+    <div class="indice-item"><span class="num">7</span><a href="#ej7">Comparación de dos proyectos — Punto de Fisher</a></div>
+  </div>
+</div>
+
+<div class="contenido">
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- EJERCICIO 1 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="ejercicio-bloque" id="ej1">
+  <div class="ej-header">
+    <div class="ej-numero">01</div>
+    <div class="ej-meta">
+      <div class="ej-clase">Clase 16 · Fórmula de Equivalencia</div>
+      <h2 class="ej-titulo">Anualizar la inflación semestral del IPC</h2>
+    </div>
+  </div>
+
+  <div class="ej-enunciado">
+    El gráfico del IPC muestra las variaciones mensuales desde julio 2024 a junio 2025. Con los datos del segundo semestre (julio a diciembre), calculá la tasa efectiva semestral y anualizala usando equivalencia.
+    <br><br>
+    Datos del gráfico: JUL 4.0% · AGO 4.2% · SEP 3.5% · OCT 2.7% · NOV 2.4% · DIC 2.7%
+  </div>
+
+  <h3 class="paso-titulo">Paso 1 — Identificar qué se pide y qué herramienta usar</h3>
+
+  <div class="identificar-box">
+    <div class="ib-titulo">Lo que tenemos y lo que necesitamos</div>
+    <div class="dato-grid">
+      <div class="dato-item"><div class="di-label">Dato</div><div class="di-valor">6 tasas</div><div class="di-nota">mensuales del IPC</div></div>
+      <div class="dato-item"><div class="di-label">t1 (dato)</div><div class="di-valor">180 días</div><div class="di-nota">semestre ≈ 6 meses</div></div>
+      <div class="dato-item"><div class="di-label">t2 (busco)</div><div class="di-valor">365 días</div><div class="di-nota">anual</div></div>
+      <div class="dato-item"><div class="di-label">Fórmula</div><div class="di-valor">Equiv.</div><div class="di-nota">respeta compuesto</div></div>
+    </div>
+  </div>
+
+  <div class="callout callout-ojo">
+    <div class="c-titulo">¿Por qué no sumamos los 6 porcentajes?</div>
+    <p>Sumar daría 4.0+4.2+3.5+2.7+2.4+2.7 = 19.5%. Pero eso ignora que en agosto los precios subieron sobre los precios ya inflados de julio, no sobre los originales. El interés <strong>se acumula sobre sí mismo</strong> (interés compuesto). La tasa semestral real se calcula multiplicando los factores (1 + tasa mensual), no sumando porcentajes.</p>
+  </div>
+
+  <h3 class="paso-titulo">Paso 2 — Calcular la tasa efectiva semestral</h3>
+
+  <p>Primero obtenemos la tasa que realmente tuvo el semestre, componiendo mes a mes:</p>
+
+  <div class="formula-step">
+    <div class="fs-label">Tasa efectiva semestral = producto de los factores mensuales - 1</div>
+    <div class="fs-formula">TES = (1+0.040) × (1+0.042) × (1+0.035) × (1+0.027) × (1+0.024) × (1+0.027) − 1</div>
+    <div class="fs-sustitucion">TES = 1.040 × 1.042 × 1.035 × 1.027 × 1.024 × 1.027 − 1</div>
+    <div class="fs-resultado">TES ≈ 0.2109 = 21.09% semestral</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 3 — Anualizar con equivalencia</h3>
+
+  <div class="formula-step">
+    <div class="fs-label">Equivalencia: i(t2) = (1 + i(t1))^(t2/t1) − 1</div>
+    <div class="fs-formula">i(365) = (1 + 0.2109)^(365/180) − 1</div>
+    <div class="fs-sustitucion">i(365) = (1.2109)^(2.028) − 1</div>
+    <div class="fs-resultado">i(365) ≈ 0.4680 = 46.80% anual</div>
+  </div>
+
+  <div class="resultado-final">
+    <div class="rf-valor">46.80%</div>
+    <div class="rf-texto">La inflación anualizada equivalente, considerando el interés compuesto del semestre julio–diciembre 2024, es de aproximadamente <strong>46.8% anual</strong>.<br>Si se usara la suma simple: 19.5% × 2 = 39.0% anual. La diferencia de casi 8 puntos es el efecto del compuesto.</div>
+  </div>
+
+  <div class="interpretacion">
+    <div class="int-titulo">Qué significa económicamente</div>
+    <p>La inflación anualizada del 46.8% significa que si los precios siguieran subiendo durante un año completo al mismo ritmo que ese semestre, al cabo de 12 meses los bienes costarían un 46.8% más. Esta tasa es la que te afecta si querés preservar el poder adquisitivo de tus ahorros: necesitás una inversión que rinda al menos 46.8% anual para "no perder" contra la inflación.</p>
+  </div>
+
+  <div class="codigo-bloque">
+    <div class="cb-header"><span class="cb-titulo">Código Python</span><span class="cb-lang">PYTHON</span></div>
+    <pre class="cb-code"><span class="cm"># Datos: tasas mensuales del IPC (en decimales)</span>
+tasas_mensuales = [<span class="nu">0.040</span>, <span class="nu">0.042</span>, <span class="nu">0.035</span>, <span class="nu">0.027</span>, <span class="nu">0.024</span>, <span class="nu">0.027</span>]
+
+<span class="cm"># Paso 1: tasa efectiva semestral (producto de factores)</span>
+factor_acumulado = <span class="nu">1</span>
+<span class="kw">for</span> t <span class="kw">in</span> tasas_mensuales:
+    factor_acumulado *= (<span class="nu">1</span> + t)
+TES = factor_acumulado - <span class="nu">1</span>
+<span class="bi">print</span>(<span class="st">f"Tasa efectiva semestral: {TES*100:.4f}%"</span>)
+
+<span class="cm"># Paso 2: anualizar con equivalencia</span>
+<span class="kw">def</span> <span class="fn">equivalencia</span>(i_t1, t2, t1):
+    <span class="kw">return</span> (<span class="nu">1</span> + i_t1) ** (t2 / t1) - <span class="nu">1</span>
+
+i_anual = <span class="fn">equivalencia</span>(TES, <span class="nu">365</span>, <span class="nu">180</span>)
+<span class="bi">print</span>(<span class="st">f"Inflación anualizada: {i_anual*100:.2f}%"</span>)</pre>
+    <div class="cb-output">Tasa efectiva semestral: 21.0938%
+Inflación anualizada: 46.80%</div>
+  </div>
+
+  <div class="variantes-bloque">
+    <div class="vb-titulo">¿Qué pasa si te piden algo diferente?</div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si te dieran solo la tasa del mes de octubre (2.7%) y pedidieran la anualizada?</div>
+      <div class="vi-respuesta">Usás equivalencia con t1 = 30 días y t2 = 365 días. Ya no componés los meses, partís directamente de ese único mes como dato.</div>
+      <div class="vi-formula">equivalencia(0.027, 365, 30) → ≈ 37.9% anual</div>
+      <div class="vi-respuesta">Nota: esto supone que ese ritmo mensual se mantiene 12 meses seguidos, lo cual es una suposición.</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si pedían pasar la tasa semestral a una tasa trimestral?</div>
+      <div class="vi-respuesta">Mismo principio: cambias t2 de 365 a 90 días. La tasa trimestral equivalente a la semestral.</div>
+      <div class="vi-formula">equivalencia(0.2109, 90, 180) → ≈ 9.84% trimestral</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si usaran proporción en vez de equivalencia?</div>
+      <div class="vi-respuesta">Sería incorrecto para tasas efectivas, pero es lo que da el "anuncio oficial" que menciona el colab. La proporción solo hace una regla de tres: 21.09% × (365/180) ≈ 42.8%. Está <strong>subestimando</strong> porque no considera el compuesto. La equivalencia siempre da un número más alto que la proporción cuando la tasa es positiva.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- EJERCICIO 2 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="ejercicio-bloque" id="ej2">
+  <div class="ej-header">
+    <div class="ej-numero">02</div>
+    <div class="ej-meta">
+      <div class="ej-clase">Clase 16 · Proporción + TEA</div>
+      <h2 class="ej-titulo">TNA 48% con capitalización mensual → TEM y TEA</h2>
+    </div>
+  </div>
+
+  <div class="ej-enunciado">
+    Tenés un capital de $1.000 que querés invertir. Un banco te ofrece una Tasa Nominal Anual (TNA) del 48% con capitalización mensual. Calculá: (1) la Tasa Efectiva Mensual (TEM) y (2) la Tasa Efectiva Anual (TEA).
+  </div>
+
+  <h3 class="paso-titulo">Paso 1 — Identificar herramientas</h3>
+
+  <div class="identificar-box">
+    <div class="ib-titulo">Diagnóstico del ejercicio</div>
+    <div class="dato-grid">
+      <div class="dato-item"><div class="di-label">Dato</div><div class="di-valor">TNA = 48%</div><div class="di-nota">0.48 en decimales</div></div>
+      <div class="dato-item"><div class="di-label">Capitaliza</div><div class="di-valor">mensual</div><div class="di-nota">cada 30 días, 12 veces/año</div></div>
+      <div class="dato-item"><div class="di-label">Para TEM</div><div class="di-valor">Proporción</div><div class="di-nota">TNA → efectiva 30d</div></div>
+      <div class="dato-item"><div class="di-label">Para TEA</div><div class="di-valor">Fórmula TEA</div><div class="di-nota">(1 + TNA/m)^m − 1</div></div>
+    </div>
+  </div>
+
+  <div class="callout callout-concepto">
+    <div class="c-titulo">¿Por qué dos fórmulas distintas para TEM y TEA?</div>
+    <p><strong>Para la TEM</strong> usamos proporción: dividimos la TNA por 12 (o multiplicamos por 30/365). Esto nos da la tasa nominal del mes, que <em>también es la tasa efectiva mensual</em> cuando hay capitalización mensual (porque el período de capitalización coincide con el período de la tasa).</p>
+    <p><strong>Para la TEA</strong> usamos la fórmula de capitalización compuesta: si el banco capitaliza 12 veces por año, necesitamos componer esas 12 veces para obtener el efecto real anual. La TNA simple no sirve como TEA porque subestima el rendimiento real.</p>
+  </div>
+
+  <h3 class="paso-titulo">Paso 2 — Calcular TEM (proporción)</h3>
+
+  <div class="formula-step">
+    <div class="fs-label">Proporción: i_efectiva = TNA × (n / 365)</div>
+    <div class="fs-formula">TEM = 0.48 × (30 / 365)</div>
+    <div class="fs-sustitucion">TEM = 0.48 × 0.08219...</div>
+    <div class="fs-resultado">TEM ≈ 0.03945 = 3.945% mensual</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 3 — Calcular TEA (compuesto 12 veces)</h3>
+
+  <div class="formula-step">
+    <div class="fs-label">TEA = (1 + TNA/m)^m − 1, donde m = 12 capitalizaciones/año</div>
+    <div class="fs-formula">TEA = (1 + 0.48/12)^12 − 1</div>
+    <div class="fs-sustitucion">TEA = (1 + 0.04)^12 − 1 = (1.04)^12 − 1</div>
+    <div class="fs-resultado">TEA ≈ 0.6010 = 60.10% anual</div>
+  </div>
+
+  <div class="resultado-final">
+    <div class="rf-valor">TEM: 3.945%<br>TEA: 60.10%</div>
+    <div class="rf-texto">La tasa mensual real es 3.945%. La tasa anual real, considerando que los intereses se capitalizan 12 veces por año, es <strong>60.10%</strong>. Mucho mayor al 48% nominal que anuncia el banco.</div>
+  </div>
+
+  <div class="interpretacion">
+    <div class="int-titulo">¿Por qué la TEA (60.1%) es tan superior a la TNA (48%)?</div>
+    <p>Porque el banco reinvierte los intereses cada mes. En enero ganás 4% sobre $1.000 = $40. En febrero ganás 4% sobre $1.040 = $41.60. El interés del mes anterior ya genera su propio interés. Al cabo de 12 meses eso suma mucho más que 48% × $1.000 = $480. La diferencia entre TNA (48%) y TEA (60.1%) es exactamente el efecto del interés sobre interés compuesto mensualmente.</p>
+    <p>Cuanto más frecuente sea la capitalización, mayor será la TEA respecto de la TNA. Si capitalizara diariamente (365 veces al año), la TEA sería aún mayor.</p>
+  </div>
+
+  <div class="codigo-bloque">
+    <div class="cb-header"><span class="cb-titulo">Código Python</span><span class="cb-lang">PYTHON</span></div>
+    <pre class="cb-code">TNA = <span class="nu">0.48</span>    <span class="cm"># Tasa Nominal Anual</span>
+m   = <span class="nu">12</span>      <span class="cm"># capitaliza mensual (12 veces por año)</span>
+n   = <span class="nu">30</span>      <span class="cm"># días del período mensual</span>
+
+<span class="cm"># TEM: proporción (tasa nominal dividida linealmente)</span>
+TEM = TNA * (n / <span class="nu">365</span>)
+<span class="bi">print</span>(<span class="st">f"TEM: {TEM*100:.4f}%"</span>)
+
+<span class="cm"># TEA: capitalización compuesta m veces en el año</span>
+TEA = (<span class="nu">1</span> + TNA/m)**m - <span class="nu">1</span>
+<span class="bi">print</span>(<span class="st">f"TEA: {TEA*100:.4f}%"</span>)
+
+<span class="cm"># Capital final con la TEM (1 período de 30 días)</span>
+capital = <span class="nu">1000</span>
+<span class="bi">print</span>(<span class="st">f"Capital al mes: ${capital * (1 + TEM):.2f}"</span>)
+<span class="bi">print</span>(<span class="st">f"Capital al año: ${capital * (1 + TEA):.2f}"</span>)</pre>
+    <div class="cb-output">TEM: 3.9452%
+TEA: 60.1032%
+Capital al mes: $1039.45
+Capital al año: $1601.03</div>
+  </div>
+
+  <div class="variantes-bloque">
+    <div class="vb-titulo">Variantes posibles</div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si la capitalización fuera trimestral (m=4) en vez de mensual?</div>
+      <div class="vi-respuesta">La TEA sería menor porque capitaliza menos veces. Con m=4: TEA = (1 + 0.48/4)^4 − 1 = (1.12)^4 − 1 ≈ 57.35%. Menos que el 60.10% mensual. A menor frecuencia de capitalización, menor TEA.</div>
+      <div class="vi-formula">TEA_trimestral = (1 + 0.48/4)^4 − 1 ≈ 57.35%</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si pedían la tasa efectiva a 90 días (trimestral) en vez de la TEA?</div>
+      <div class="vi-respuesta">Primero sacás la TEM con proporción (3.945%), y después aplicás equivalencia para llevarla a 90 días.</div>
+      <div class="vi-formula">equivalencia(0.03945, 90, 30) → (1.03945)^3 − 1 ≈ 12.25% trimestral</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si la tasa fuera diaria en vez de mensual?</div>
+      <div class="vi-respuesta">La proporción cambia: n = 1 día. TED = TNA × (1/365). Para la TEA: (1 + TNA/365)^365 − 1. Con TNA 48%: TEA ≈ 61.63%. La capitalización diaria siempre da la TEA más alta posible para una TNA dada.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- EJERCICIO 3 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="ejercicio-bloque" id="ej3">
+  <div class="ej-header">
+    <div class="ej-numero">03</div>
+    <div class="ej-meta">
+      <div class="ej-clase">Clase 16 · Valor Actual Neto</div>
+      <h2 class="ej-titulo">VAN de un proyecto de inversión</h2>
+    </div>
+  </div>
+
+  <div class="ej-enunciado">
+    Una empresa evalúa un proyecto que requiere una inversión inicial de $50.000 en el Año 0. Los flujos de caja esperados son: Año 1: $15.000 · Año 2: $20.000 · Año 3: $25.000 · Año 4: $10.000. La tasa de descuento requerida (costo de capital) es del 10% anual. Calculá el VAN e interpretá si el proyecto es rentable.
+  </div>
+
+  <h3 class="paso-titulo">Paso 1 — Armar la tabla de flujos y valores presentes</h3>
+
+  <div class="identificar-box">
+    <div class="ib-titulo">Datos del proyecto</div>
+    <div class="dato-grid">
+      <div class="dato-item"><div class="di-label">Inversión</div><div class="di-valor">$50.000</div><div class="di-nota">desembolso año 0</div></div>
+      <div class="dato-item"><div class="di-label">Tasa (r)</div><div class="di-valor">10%</div><div class="di-nota">costo de capital anual</div></div>
+      <div class="dato-item"><div class="di-label">Horizonte</div><div class="di-valor">4 años</div><div class="di-nota">flujos positivos</div></div>
+    </div>
+  </div>
+
+  <p>El VAN descuenta cada flujo futuro dividiéndolo por <strong>(1 + 0.10)^t</strong>. Cuanto más lejano es el flujo, más se "achica" al traerlo al presente:</p>
+
+  <table class="tabla-datos">
+    <tr><th>Año (t)</th><th>Flujo nominal</th><th>Factor de descuento</th><th>Valor Presente</th></tr>
+    <tr><td>0</td><td class="td-mono rojo">−$50.000</td><td class="td-mono">1.0000</td><td class="td-mono rojo">−$50.000,00</td></tr>
+    <tr><td>1</td><td class="td-mono">$15.000</td><td class="td-mono">1 / (1.10)¹ = 0.9091</td><td class="td-mono">$13.636,36</td></tr>
+    <tr><td>2</td><td class="td-mono">$20.000</td><td class="td-mono">1 / (1.10)² = 0.8264</td><td class="td-mono">$16.528,93</td></tr>
+    <tr><td>3</td><td class="td-mono">$25.000</td><td class="td-mono">1 / (1.10)³ = 0.7513</td><td class="td-mono">$18.782,87</td></tr>
+    <tr><td>4</td><td class="td-mono">$10.000</td><td class="td-mono">1 / (1.10)⁴ = 0.6830</td><td class="td-mono">$6.830,13</td></tr>
+  </table>
+
+  <h3 class="paso-titulo">Paso 2 — Sumar los valores presentes</h3>
+
+  <div class="formula-step">
+    <div class="fs-label">VAN = suma de todos los VP incluyendo la inversión inicial</div>
+    <div class="fs-formula">VAN = −50.000 + 13.636,36 + 16.528,93 + 18.782,87 + 6.830,13</div>
+    <div class="fs-resultado">VAN = $5.778,29</div>
+  </div>
+
+  <div class="resultado-final">
+    <div class="rf-valor">$5.778</div>
+    <div class="rf-texto">El VAN es <strong>positivo</strong>. El proyecto genera $5.778 de valor extra por encima del 10% exigido. Conviene aceptarlo.<br><br>Otra forma de leerlo: si pagamos hasta $55.778 por este proyecto (en vez de $50.000), el VAN sería cero. Estamos pagando $5.778 menos que su valor máximo.</div>
+  </div>
+
+  <div class="interpretacion">
+    <div class="int-titulo">Interpretación económica completa</div>
+    <p><strong>El VAN positivo de $5.778 significa:</strong> la empresa puede invertir $50.000, ganar sus flujos esperados, pagar el 10% de costo de capital (que representa lo que costaría financiarse o el rendimiento alternativo), y <em>además</em> le sobran $5.778 de ganancia en valor de hoy.</p>
+    <p><strong>¿Qué representa el 10%?</strong> Es el mínimo que se le exige al proyecto. Podría ser el costo de un préstamo, la inflación esperada, o el rendimiento de una inversión alternativa equivalente en riesgo. Si el proyecto no supera ese 10%, conviene la alternativa.</p>
+    <p><strong>Los flujos nominales suman $70.000</strong> (15+20+25+10), pero en valor presente solo valen $55.778. Los $14.222 de diferencia es el "precio" del tiempo: plata futura vale menos que plata hoy.</p>
+  </div>
+
+  <div class="codigo-bloque">
+    <div class="cb-header"><span class="cb-titulo">Código Python</span><span class="cb-lang">PYTHON</span></div>
+    <pre class="cb-code"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy_financial <span class="kw">as</span> nf
+
+flujos = [<span class="nu">-50000</span>, <span class="nu">15000</span>, <span class="nu">20000</span>, <span class="nu">25000</span>, <span class="nu">10000</span>]
+tasa   = <span class="nu">0.10</span>
+
+<span class="cm"># Método 1: manual con DataFrame</span>
+df = pd.<span class="fn">DataFrame</span>({<span class="st">'Año'</span>: <span class="fn">range</span>(<span class="nu">5</span>), <span class="st">'Flujo'</span>: flujos})
+df[<span class="st">'VP'</span>] = df[<span class="st">'Flujo'</span>] / (<span class="nu">1</span> + tasa) ** df[<span class="st">'Año'</span>]
+van = df[<span class="st">'VP'</span>].<span class="fn">sum</span>()
+<span class="bi">print</span>(df.<span class="fn">to_string</span>())
+<span class="bi">print</span>(<span class="st">f"\nVAN (manual): ${van:.2f}"</span>)
+
+<span class="cm"># Método 2: numpy_financial (más rápido)</span>
+van_nf = nf.<span class="fn">npv</span>(tasa, flujos)
+<span class="bi">print</span>(<span class="st">f"VAN (numpy_financial): ${van_nf:.2f}"</span>)
+
+<span class="kw">if</span> van_nf > <span class="nu">0</span>:
+    <span class="bi">print</span>(<span class="st">"Conclusión: VAN positivo → proyecto RENTABLE"</span>)</pre>
+    <div class="cb-output">   Año   Flujo           VP
+0    0  -50000  -50000.000000
+1    1   15000   13636.363636
+2    2   20000   16528.925620
+3    3   25000   18782.870454
+4    4   10000    6830.134554
+
+VAN (manual): $5778.29
+VAN (numpy_financial): $5778.29
+Conclusión: VAN positivo → proyecto RENTABLE</div>
+  </div>
+
+  <div class="variantes-bloque">
+    <div class="vb-titulo">Variantes posibles</div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Qué pasa si la tasa sube al 20%?</div>
+      <div class="vi-respuesta">El VAN se vuelve negativo: los flujos futuros valen menos en el presente con una tasa más alta. Con 20%: VP de flujos = 15000/1.2 + 20000/1.44 + 25000/1.728 + 10000/2.074 = $44.128. VAN = 44.128 − 50.000 = −$5.872. El proyecto ya no conviene. Hay una tasa (entre 10% y 20%) a la cual el VAN = 0: esa es la TIR.</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si los flujos fueran iguales (anualidad de $17.500 los 4 años)?</div>
+      <div class="vi-respuesta">Los flujos nominales suman lo mismo ($70.000) pero la distribución temporal cambia el VAN. Con flujos planos, los años 1 y 2 aportan menos (17.500 vs 15.000 y 20.000 del original), mientras que el año 3 aporta menos también. La lógica del VAN premia recibir más plata antes.</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si preguntaban el Valor Presente de solo los flujos futuros (sin restar la inversión)?</div>
+      <div class="vi-respuesta">Eso es el VP de los flujos: $55.778,29. El VAN agrega un paso más: restarle la inversión inicial ($50.000). La diferencia entre VP de flujos e inversión es el VAN. Si VP &gt; inversión → VAN &gt; 0 → rentable.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- EJERCICIO 4 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="ejercicio-bloque" id="ej4">
+  <div class="ej-header">
+    <div class="ej-numero">04</div>
+    <div class="ej-meta">
+      <div class="ej-clase">Clase 16 · Obligación Negociable — Proporción + Valor Futuro</div>
+      <h2 class="ej-titulo">Rendimiento mensual de la ON de Edenor (8% anual en USD)</h2>
+    </div>
+  </div>
+
+  <div class="ej-enunciado">
+    Edenor ofrece una Obligación Negociable con rendimientos de hasta 8% anual en USD, con inversión mínima desde USD 100. Calculá cuánto ganarías por mes invirtiendo USD 100 y USD 1.000. Asumí capitalización mensual.
+  </div>
+
+  <h3 class="paso-titulo">Paso 1 — Identificar herramientas</h3>
+
+  <div class="identificar-box">
+    <div class="ib-titulo">Estrategia: TNA → TEM → Valor Futuro</div>
+    <div class="dato-grid">
+      <div class="dato-item"><div class="di-label">TNA dada</div><div class="di-valor">8% USD</div><div class="di-nota">0.08 en decimales</div></div>
+      <div class="dato-item"><div class="di-label">Período</div><div class="di-valor">1 mes</div><div class="di-nota">30 días</div></div>
+      <div class="dato-item"><div class="di-label">Paso 1</div><div class="di-valor">Proporción</div><div class="di-nota">TNA → TEM</div></div>
+      <div class="dato-item"><div class="di-label">Paso 2</div><div class="di-valor">Cap. comp.</div><div class="di-nota">VF = C0 × (1+TEM)^1</div></div>
+    </div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 2 — Obtener la TEM con proporción</h3>
+
+  <div class="formula-step">
+    <div class="fs-label">Proporción: i_efectiva = TNA × (n / 365)</div>
+    <div class="fs-formula">TEM = 0.08 × (30 / 365)</div>
+    <div class="fs-sustitucion">TEM = 0.08 × 0.08219...</div>
+    <div class="fs-resultado">TEM ≈ 0.006575 = 0.6575% mensual</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 3 — Calcular el valor futuro al mes</h3>
+
+  <div class="formula-step">
+    <div class="fs-label">Capitalización compuesta: VF = C0 × (1 + TEM)^n, con n=1</div>
+    <div class="fs-formula">VF_100  = 100  × (1 + 0.006575)^1</div>
+    <div class="fs-sustitucion">VF_100  = 100  × 1.006575</div>
+    <div class="fs-resultado">VF_100 = USD 100.66  →  ganancia: USD 0.66 en el primer mes</div>
+  </div>
+
+  <div class="formula-step">
+    <div class="fs-label">Con USD 1.000</div>
+    <div class="fs-formula">VF_1000 = 1000 × (1 + 0.006575)^1 = USD 1.006,58</div>
+    <div class="fs-resultado">Ganancia: USD 6.58 en el primer mes</div>
+  </div>
+
+  <div class="resultado-final">
+    <div class="rf-valor" style="font-size: 22px;">USD 100 → $0.66/mes<br>USD 1.000 → $6.58/mes</div>
+    <div class="rf-texto">Las ganancias son proporcionales al capital. La tasa del 8% anual suena modesta en el mes, pero al capitalizarse 12 veces da un rendimiento anual efectivo mayor al 8% nominal.</div>
+  </div>
+
+  <div class="interpretacion">
+    <div class="int-titulo">¿Vale la pena esta inversión?</div>
+    <p><strong>El 8% anual en dólares</strong> es considerado un rendimiento competitivo para una obligación negociable corporativa argentina con riesgo moderado. En términos de poder adquisitivo en USD, preserva el capital mejor que muchas alternativas en pesos.</p>
+    <p><strong>La TEA real</strong> (considerando capitalización mensual) es: (1 + 0.08/12)^12 − 1 ≈ <strong>8.30% anual efectivo</strong>. Los 0.30 puntos adicionales sobre el 8% nominal son el interés compuesto del año.</p>
+    <p><strong>Comparación de escala:</strong> con USD 100 ganás $0.66/mes, con USD 1.000 ganás $6.58/mes, con USD 10.000 ganás $65.80/mes. El rendimiento crece linealmente con el capital porque la tasa es la misma. Es importante tener en cuenta el riesgo de crédito de Edenor al evaluar si el 8% compensa adecuadamente.</p>
+  </div>
+
+  <div class="codigo-bloque">
+    <div class="cb-header"><span class="cb-titulo">Código Python</span><span class="cb-lang">PYTHON</span></div>
+    <pre class="cb-code">TNA = <span class="nu">0.08</span>   <span class="cm"># 8% anual en USD</span>
+n   = <span class="nu">30</span>     <span class="cm"># días del período mensual</span>
+
+<span class="cm"># Paso 1: TEM con proporción</span>
+TEM = TNA * (n / <span class="nu">365</span>)
+<span class="bi">print</span>(<span class="st">f"TEM: {TEM*100:.4f}% mensual"</span>)
+
+<span class="cm"># Paso 2: valor futuro al mes (1 período)</span>
+<span class="kw">for</span> capital <span class="kw">in</span> [<span class="nu">100</span>, <span class="nu">1000</span>, <span class="nu">10000</span>]:
+    vf = capital * (<span class="nu">1</span> + TEM)**<span class="nu">1</span>
+    ganancia = vf - capital
+    <span class="bi">print</span>(<span class="st">f"Capital USD {capital:>6} → VF: USD {vf:>10.2f} | Ganancia mes 1: USD {ganancia:.2f}"</span>)
+
+<span class="cm"># TEA real</span>
+TEA = (<span class="nu">1</span> + TNA/<span class="nu">12</span>)**<span class="nu">12</span> - <span class="nu">1</span>
+<span class="bi">print</span>(<span class="st">f"\nTEA real (capitalización mensual): {TEA*100:.4f}%"</span>)</pre>
+    <div class="cb-output">TEM: 0.6575% mensual
+Capital USD    100 → VF: USD     100.66 | Ganancia mes 1: USD 0.66
+Capital USD   1000 → VF: USD    1006.58 | Ganancia mes 1: USD 6.58
+Capital USD  10000 → VF: USD   10065.75 | Ganancia mes 1: USD 65.75
+
+TEA real (capitalización mensual): 8.3000%</div>
+  </div>
+
+  <div class="variantes-bloque">
+    <div class="vb-titulo">Variantes posibles</div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Cuánto tendrías después de 12 meses con USD 1.000?</div>
+      <div class="vi-respuesta">Usás n=12 en la fórmula de capitalización compuesta. No n=1.</div>
+      <div class="vi-formula">VF = 1000 × (1 + 0.006575)^12 = USD 1083,00</div>
+      <div class="vi-respuesta">Ganás USD 83, que equivale al 8.30% anual efectivo (TEA) sobre los $1.000 iniciales.</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si pagara cupones semestrales en vez de capitalizar mensualmente?</div>
+      <div class="vi-respuesta">En ese caso, primero calcularías la TES con proporción (8% × 180/365 ≈ 3.95%) y luego el valor futuro semestral. Sin capitalización intermedia, ganarías menos que con capitalización mensual.</div>
+      <div class="vi-formula">TES = 0.08 × (180/365) ≈ 3.945% semestral → USD 39.45 cada 6 meses por USD 1.000</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- EJERCICIO 5 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="ejercicio-bloque" id="ej5">
+  <div class="ej-header">
+    <div class="ej-numero">05</div>
+    <div class="ej-meta">
+      <div class="ej-clase">Clase 17 · VAN + TIR + TIRM + IR + PRS + PRD</div>
+      <h2 class="ej-titulo">Análisis completo de un proyecto rentable</h2>
+    </div>
+  </div>
+
+  <div class="ej-enunciado">
+    Proyecto con flujos: Año 0: −$10.000, Año 1: $3.000, Año 2: $4.000, Año 3: $5.000, Año 4: $3.000. Tasa de descuento (costo de capital): 10% anual. Calculá todas las métricas e interpretá.
+  </div>
+
+  <h3 class="paso-titulo">Paso 1 — Decidir qué medir y en qué orden</h3>
+
+  <div class="callout callout-tip">
+    <div class="c-titulo">Orden lógico de cálculo</div>
+    <p><strong>1°) VAN</strong>: la decisión central. Si es positivo, el proyecto conviene. Necesita los flujos y la tasa.</p>
+    <p><strong>2°) TIR</strong>: ¿a qué tasa "empata" el proyecto? Complementa el VAN con un porcentaje comunicable.</p>
+    <p><strong>3°) TIRM</strong>: versión realista de la TIR. Necesita además definir tasa de reinversión (usamos la misma tasa r).</p>
+    <p><strong>4°) IR</strong>: eficiencia por peso invertido. Derivable del VAN: IR = 1 + VAN/I₀.</p>
+    <p><strong>5°) PRS</strong>: ¿cuántos años sin descontar para recuperar? Solo acumula flujos nominales.</p>
+    <p><strong>6°) PRD</strong>: igual pero con flujos descontados. Siempre ≥ PRS.</p>
+  </div>
+
+  <h3 class="paso-titulo">Paso 2 — VAN</h3>
+
+  <table class="tabla-datos">
+    <tr><th>Año</th><th>Flujo</th><th>Divisor (1.10)^t</th><th>Valor Presente</th></tr>
+    <tr><td>0</td><td class="td-mono rojo">−$10.000</td><td>1.0000</td><td class="td-mono rojo">−$10.000,00</td></tr>
+    <tr><td>1</td><td class="td-mono">$3.000</td><td>1.1000</td><td class="td-mono">$2.727,27</td></tr>
+    <tr><td>2</td><td class="td-mono">$4.000</td><td>1.2100</td><td class="td-mono">$3.305,79</td></tr>
+    <tr><td>3</td><td class="td-mono">$5.000</td><td>1.3310</td><td class="td-mono">$3.756,57</td></tr>
+    <tr><td>4</td><td class="td-mono">$3.000</td><td>1.4641</td><td class="td-mono">$2.049,04</td></tr>
+  </table>
+
+  <div class="formula-step">
+    <div class="fs-resultado">VAN = −10.000 + 2.727,27 + 3.305,79 + 3.756,57 + 2.049,04 = $1.838,67</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 3 — TIR</h3>
+
+  <p>La TIR no se puede calcular a mano directamente. Python la busca iterativamente. Lo que sí podemos razonar: el VAN con r=10% es $1.838 (positivo). Eso significa que la TIR es <strong>mayor que 10%</strong>: si subiéramos la tasa hasta que el VAN sea 0, necesitamos subir bastante. El cálculo da:</p>
+
+  <div class="formula-step">
+    <div class="fs-label">TIR → la tasa que hace VAN = 0 (por iteración)</div>
+    <div class="fs-resultado">TIR ≈ 18.03% anual</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 4 — TIRM</h3>
+
+  <p>Asumimos que la tasa de financiamiento y la de reinversión son ambas iguales al costo de capital (10%). La TIRM penaliza la TIR porque ya no supone reinvertir al irreal 18.03%, sino al realista 10%:</p>
+
+  <div class="formula-step">
+    <div class="fs-label">TIRM con tasa reinversión = tasa financiamiento = 10%</div>
+    <div class="fs-resultado">TIRM ≈ 14.74% anual</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 5 — IR</h3>
+
+  <div class="formula-step">
+    <div class="fs-label">IR = VP de flujos futuros / Inversión inicial</div>
+    <div class="fs-formula">IR = (2.727,27 + 3.305,79 + 3.756,57 + 2.049,04) / 10.000</div>
+    <div class="fs-sustitucion">IR = 11.838,67 / 10.000</div>
+    <div class="fs-resultado">IR = 1.18</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 6 — PRS (flujos acumulados sin descontar)</h3>
+
+  <table class="tabla-datos">
+    <tr><th>Año</th><th>Flujo</th><th>Acumulado sin descontar</th><th>¿Recuperó?</th></tr>
+    <tr><td>0</td><td class="rojo">−$10.000</td><td class="rojo">−$10.000</td><td>No</td></tr>
+    <tr><td>1</td><td>+$3.000</td><td>−$7.000</td><td>No</td></tr>
+    <tr><td>2</td><td>+$4.000</td><td>−$3.000</td><td>No</td></tr>
+    <tr><td>3</td><td>+$5.000</td><td>+$2.000</td><td>✓ Cruza aquí</td></tr>
+  </table>
+
+  <div class="formula-step">
+    <div class="fs-label">PRS = año anterior al cruce + fracción del año en que cruza</div>
+    <div class="fs-formula">Pendiente al inicio del año 3 = $3.000 | Flujo del año 3 = $5.000</div>
+    <div class="fs-sustitucion">PRS = (3 − 1) + (3.000 / 5.000)</div>
+    <div class="fs-resultado">PRS = 2 + 0.60 = 2.60 años</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 7 — PRD (flujos descontados acumulados)</h3>
+
+  <table class="tabla-datos">
+    <tr><th>Año</th><th>Flujo desc.</th><th>Acumulado descontado</th></tr>
+    <tr><td>0</td><td class="rojo">−$10.000</td><td class="rojo">−$10.000</td></tr>
+    <tr><td>1</td><td>$2.727,27</td><td>−$7.272,73</td></tr>
+    <tr><td>2</td><td>$3.305,79</td><td>−$3.966,94</td></tr>
+    <tr><td>3</td><td>$3.756,57</td><td>−$210,37</td></tr>
+    <tr><td>4</td><td>$2.049,04</td><td>+$1.838,67 ✓</td></tr>
+  </table>
+
+  <div class="formula-step">
+    <div class="fs-formula">Pendiente al inicio del año 4 = $210,37 | Flujo desc. año 4 = $2.049,04</div>
+    <div class="fs-resultado">PRD = (4 − 1) + (210,37 / 2.049,04) = 3 + 0.10 = 3.10 años</div>
+  </div>
+
+  <div class="resultado-final">
+    <div class="rf-valor" style="font-size: 20px;">VAN: $1.839<br>TIR: 18.03%<br>TIRM: 14.74%<br>IR: 1.18</div>
+    <div class="rf-texto"><strong>Todas las métricas coinciden: el proyecto es rentable.</strong><br><br>
+    VAN &gt; 0 → genera valor.<br>TIR (18%) &gt; r (10%) → rinde más que el costo del capital.<br>TIRM (14.74%) &gt; r (10%) → incluso con reinversión realista, conviene.<br>IR (1.18) &gt; 1 → por cada $1 invertido se obtienen $1.18 de VP.<br>PRS: 2.6 años · PRD: 3.1 años.</div>
+  </div>
+
+  <div class="interpretacion">
+    <div class="int-titulo">Lectura conjunta de las métricas</div>
+    <p><strong>VAN vs TIR:</strong> el VAN dice que hay $1.838 de valor extra. La TIR dice que el proyecto rinde 18%, que es 8 puntos más que el costo de capital requerido. Son dos formas de decir lo mismo: el proyecto supera el umbral.</p>
+    <p><strong>TIR vs TIRM:</strong> la diferencia de 3.3 puntos (18.03% - 14.74%) es moderada. Parte del atractivo de la TIR venía del supuesto de reinversión al 18%, que es optimista. Pero la TIRM también supera el 10%, así que el proyecto sigue siendo bueno con supuestos conservadores.</p>
+    <p><strong>PRS vs PRD:</strong> la diferencia de 0.5 años entre PRS (2.6) y PRD (3.1) muestra el impacto del costo del tiempo: los flujos del año 3 "valen menos" al descontarlos, por lo que tardan un poco más en cubrir la inversión. Aun así, recupera antes del año 4, que tiene los flujos más tardíos.</p>
+    <p><strong>IR = 1.18</strong>: por cada $1.000 invertidos se generan $1.180 de valor presente de flujos futuros, un excedente de $180 sobre lo invertido (ese excedente en total es el VAN).</p>
+  </div>
+
+  <div class="codigo-bloque">
+    <div class="cb-header"><span class="cb-titulo">Código Python — todas las métricas de una sola vez</span><span class="cb-lang">PYTHON</span></div>
+    <pre class="cb-code"><span class="kw">import</span> numpy_financial <span class="kw">as</span> nf
+
+flujos = [<span class="nu">-10000</span>, <span class="nu">3000</span>, <span class="nu">4000</span>, <span class="nu">5000</span>, <span class="nu">3000</span>]
+tasa   = <span class="nu">0.10</span>
+
+<span class="cm"># VAN y TIR</span>
+van  = nf.<span class="fn">npv</span>(tasa, flujos)
+tir  = nf.<span class="fn">irr</span>(flujos)
+tirm = nf.<span class="fn">mirr</span>(flujos, tasa, tasa)
+
+<span class="cm"># IR</span>
+I0 = <span class="fn">abs</span>(flujos[<span class="nu">0</span>])
+vp_futuros = <span class="fn">sum</span>(f / (<span class="nu">1</span>+tasa)**t <span class="kw">for</span> t, f <span class="kw">in</span> <span class="fn">enumerate</span>(flujos[<span class="nu">1</span>:], <span class="nu">1</span>))
+ir = vp_futuros / I0
+
+<span class="cm"># PRS</span>
+acum = <span class="nu">0</span>
+<span class="kw">for</span> t <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">1</span>, <span class="fn">len</span>(flujos)):
+    acum += flujos[t]
+    <span class="kw">if</span> acum >= I0:
+        prs = (t-<span class="nu">1</span>) + (I0 - (acum - flujos[t])) / flujos[t]
+        <span class="kw">break</span>
+
+<span class="cm"># PRD</span>
+acum_d = <span class="nu">0</span>
+<span class="kw">for</span> t <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">1</span>, <span class="fn">len</span>(flujos)):
+    fd = flujos[t] / (<span class="nu">1</span>+tasa)**t
+    acum_d += fd
+    <span class="kw">if</span> acum_d >= I0:
+        prd = (t-<span class="nu">1</span>) + (I0 - (acum_d - fd)) / fd
+        <span class="kw">break</span>
+
+<span class="bi">print</span>(<span class="st">f"VAN  = ${van:.2f}   {'✓' if van>0 else '✗'}"</span>)
+<span class="bi">print</span>(<span class="st">f"TIR  = {tir:.2%}   {'✓' if tir>tasa else '✗'} vs r={tasa:.0%}"</span>)
+<span class="bi">print</span>(<span class="st">f"TIRM = {tirm:.2%}   {'✓' if tirm>tasa else '✗'}"</span>)
+<span class="bi">print</span>(<span class="st">f"IR   = {ir:.2f}      {'✓' if ir>1 else '✗'}"</span>)
+<span class="bi">print</span>(<span class="st">f"PRS  = {prs:.2f} años"</span>)
+<span class="bi">print</span>(<span class="st">f"PRD  = {prd:.2f} años"</span>)</pre>
+    <div class="cb-output">VAN  = $1838.67   ✓
+TIR  = 18.03%   ✓ vs r=10%
+TIRM = 14.74%   ✓
+IR   = 1.18      ✓
+PRS  = 2.60 años
+PRD  = 3.10 años</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- EJERCICIO 6 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="ejercicio-bloque" id="ej6">
+  <div class="ej-header">
+    <div class="ej-numero">06</div>
+    <div class="ej-meta">
+      <div class="ej-clase">Clase 17 · Proyecto no rentable — qué significan los resultados negativos</div>
+      <h2 class="ej-titulo">Proyecto no rentable: flujos decrecientes a tasa alta</h2>
+    </div>
+  </div>
+
+  <div class="ej-enunciado">
+    Nuevos flujos: Año 0: −$20.000, luego: $5.000, $4.000, $3.000, $3.000, $2.000, $2.000, $1.500, $1.500, $1.000, $1.000. Tasa de descuento: 12% anual.
+  </div>
+
+  <h3 class="paso-titulo">Diagnóstico antes de calcular</h3>
+
+  <div class="callout callout-ojo">
+    <div class="c-titulo">Señal de alerta: flujos decrecientes con tasa alta</div>
+    <p>Los flujos van de $5.000 a $1.000: decrecen con el tiempo. El descuento del 12% anual castiga duramente los flujos lejanos. $1.000 en el año 10, descontado al 12%, vale solo $1.000 / (1.12)^10 = <strong>$322</strong>. Los flujos pequeños y tardíos contribuyen poco en VP. Es una combinación desfavorable.</p>
+    <p>La suma nominal de los flujos positivos es $24.000 &gt; $20.000 (inversión). En nominal parece que conviene. Pero en valor presente, muchos de esos $24.000 están muy lejos en el tiempo y valen mucho menos.</p>
+  </div>
+
+  <h3 class="paso-titulo">Resultados calculados</h3>
+
+  <table class="tabla-datos">
+    <tr><th>Métrica</th><th>Resultado</th><th>Umbral</th><th>¿Pasa?</th></tr>
+    <tr><td>VAN</td><td class="td-mono rojo">−$4.190,00</td><td>&gt; 0</td><td class="rojo">✗ No</td></tr>
+    <tr><td>TIR</td><td class="td-mono amber">4.79%</td><td>&gt; 12%</td><td class="rojo">✗ No (muy baja)</td></tr>
+    <tr><td>TIRM</td><td class="td-mono amber">9.40%</td><td>&gt; 12%</td><td class="rojo">✗ No</td></tr>
+    <tr><td>IR</td><td class="td-mono rojo">0.79</td><td>&gt; 1</td><td class="rojo">✗ No</td></tr>
+    <tr><td>PRS</td><td class="td-mono">6.67 años</td><td>—</td><td class="amber">Tarda mucho</td></tr>
+    <tr><td>PRD</td><td class="td-mono rojo">No se recupera</td><td>—</td><td class="rojo">✗ Nunca</td></tr>
+  </table>
+
+  <div class="resultado-final negativo">
+    <div class="rf-valor">VAN: −$4.190</div>
+    <div class="rf-texto">El proyecto <strong>NO es rentable</strong> al 12%. Todas las métricas van en la misma dirección: no conviene.</div>
+  </div>
+
+  <div class="interpretacion">
+    <div class="int-titulo">Leer cada métrica negativa</div>
+    <p><strong>VAN = −$4.190:</strong> los flujos futuros, traídos al presente al 12%, solo valen $15.810. La empresa invierte $20.000 pero solo recupera $15.810 en valor presente. Destruye $4.190 de valor.</p>
+    <p><strong>TIR = 4.79%:</strong> el proyecto rinde solo 4.79% por sí mismo. Si la empresa puede conseguir capital al 12% (o tiene alternativas que rinden 12%), este proyecto no alcanza ni a pagar el costo del dinero. Es como pedir un préstamo al 12% para poner en un plazo fijo al 4.79%.</p>
+    <p><strong>TIRM = 9.40% &gt; TIR = 4.79%:</strong> ¿por qué la TIRM es mayor que la TIR acá? Porque los flujos intermedios positivos se reinvierten al 12% (mayor que la TIR), lo que eleva el rendimiento medido por la TIRM. La TIRM sigue siendo menor que el costo de capital (12%), así que el proyecto sigue siendo inviable.</p>
+    <p><strong>IR = 0.79:</strong> por cada $1 invertido, el valor presente de los retornos es solo $0.79. La empresa destruye $0.21 de valor por cada peso invertido.</p>
+    <p><strong>PRD no existe:</strong> nunca se recupera la inversión en términos de valor presente. Esto es matemáticamente inevitable cuando el VAN es negativo: si el VAN es negativo, los flujos descontados totales nunca alcanzan la inversión.</p>
+  </div>
+
+  <div class="callout callout-variante">
+    <div class="c-titulo">¿Cuándo SÍ convendría este proyecto?</div>
+    <p>El proyecto tendría VAN = 0 cuando la tasa de descuento sea igual a la TIR (4.79%). A tasas <em>menores al 4.79%</em>, el VAN sería positivo. Por ejemplo, con r = 2% (un bono libre de riesgo muy bajo), este proyecto podría convenir. El mensaje es que el proyecto es demasiado "lento y chico" para tasas de descuento altas: necesitás un costo de capital muy bajo para que el valor presente de esos flujos pequeños y tardíos cubra los $20.000 iniciales.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- EJERCICIO 7 -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="ejercicio-bloque" id="ej7">
+  <div class="ej-header">
+    <div class="ej-numero">07</div>
+    <div class="ej-meta">
+      <div class="ej-clase">Clase 17 · Comparación de proyectos + Punto de Fisher</div>
+      <h2 class="ej-titulo">Elegir entre dos proyectos — el rol de la tasa</h2>
+    </div>
+  </div>
+
+  <div class="ej-enunciado">
+    Proyecto A: [−15.000, 6.000, 5.000, 4.000, 3.000, 2.000]. Proyecto B: [−20.000, 4.000, 4.000, 4.000, 4.000, 4.000, 4.000, 4.000, 4.000]. Tasa de descuento: 15% anual para ambos. ¿Cuál elegís?
+  </div>
+
+  <h3 class="paso-titulo">Paso 1 — Calcular todas las métricas para ambos</h3>
+
+  <div class="comparacion-grid">
+    <div class="comp-card card-a">
+      <div class="cc-header">Proyecto A · inv. $15.000 · flujos altos pero cortos</div>
+      <div class="cc-body">
+        <div class="cc-fila"><span class="cf-label">VAN</span><span class="cf-val rojo">−$662,21</span></div>
+        <div class="cc-fila"><span class="cf-label">TIR</span><span class="cf-val amber">12.75%</span></div>
+        <div class="cc-fila"><span class="cf-label">TIRM</span><span class="cf-val amber">13.97%</span></div>
+        <div class="cc-fila"><span class="cf-label">IR</span><span class="cf-val amber">0.96</span></div>
+        <div class="cc-fila"><span class="cf-label">PRS</span><span class="cf-val verde">3.00 años</span></div>
+        <div class="cc-fila"><span class="cf-label">PRD</span><span class="cf-val rojo">No se recupera</span></div>
+      </div>
+    </div>
+    <div class="comp-card card-b">
+      <div class="cc-header">Proyecto B · inv. $20.000 · flujos menores pero largos</div>
+      <div class="cc-body">
+        <div class="cc-fila"><span class="cf-label">VAN</span><span class="cf-val rojo">−$2.050,71</span></div>
+        <div class="cc-fila"><span class="cf-label">TIR</span><span class="cf-val rojo">11.81%</span></div>
+        <div class="cc-fila"><span class="cf-label">TIRM</span><span class="cf-val rojo">13.46%</span></div>
+        <div class="cc-fila"><span class="cf-label">IR</span><span class="cf-val rojo">0.90</span></div>
+        <div class="cc-fila"><span class="cf-label">PRS</span><span class="cf-val rojo">5.00 años</span></div>
+        <div class="cc-fila"><span class="cf-label">PRD</span><span class="cf-val rojo">No se recupera</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 2 — Primera lectura: ninguno conviene a tasa del 15%</h3>
+
+  <div class="resultado-final negativo">
+    <div class="rf-valor" style="font-size: 20px;">Ambos VAN &lt; 0</div>
+    <div class="rf-texto">Con una tasa de descuento del 15%, ni el Proyecto A ni el Proyecto B son rentables. Ambos tienen TIR por debajo del 15% exigido. Si la empresa tiene acceso a alternativas que rinden 15%, ninguno de los dos conviene.<br><br>Sin embargo, si hay que elegir el "menos malo", Proyecto A es preferible en todas las métricas.</div>
+  </div>
+
+  <h3 class="paso-titulo">Paso 3 — El Punto de Fisher: ¿la conclusión cambiaría con otra tasa?</h3>
+
+  <div class="callout callout-concepto">
+    <div class="c-titulo">Qué es el Punto de Fisher</div>
+    <p>Si graficamos el VAN de ambos proyectos para distintas tasas de descuento, las dos curvas se cruzan en algún punto. Ese punto se llama <strong>Punto de Fisher</strong>: es la tasa a la cual los dos proyectos tienen exactamente el mismo VAN.</p>
+    <p>A la izquierda del cruce (tasas bajas): un proyecto tiene VAN mayor. A la derecha (tasas altas): el otro tiene VAN mayor. Y en el cruce: son iguales.</p>
+  </div>
+
+  <p>Para este ejercicio, el Punto de Fisher se encuentra alrededor del <strong>11.1%</strong>. Esto significa:</p>
+
+  <table class="tabla-datos">
+    <tr><th>Si la tasa r es...</th><th>Ambos VAN</th><th>¿Cuál elegir?</th><th>¿Por qué?</th></tr>
+    <tr><td class="verde">r &lt; 11.1%</td><td class="verde">Ambos positivos</td><td class="verde">Proyecto B</td><td>B tiene mayor VAN absoluto (más capital a tasa baja = más valor)</td></tr>
+    <tr><td class="amber">r = 11.1%</td><td>Iguales</td><td class="amber">Indiferente</td><td>El Punto de Fisher exacto</td></tr>
+    <tr><td class="amber">11.1% &lt; r &lt; 11.81%</td><td>Solo A positivo</td><td class="amber">Proyecto A</td><td>B ya tiene VAN negativo, A todavía positivo</td></tr>
+    <tr><td class="amber">11.81% &lt; r &lt; 12.75%</td><td>Solo A positivo</td><td class="amber">Proyecto A</td><td>A tiene mayor TIR, cruza cero más tarde</td></tr>
+    <tr><td class="rojo">r &gt; 12.75%</td><td>Ambos negativos</td><td class="rojo">Ninguno</td><td>Ningún proyecto supera el costo de capital</td></tr>
+  </table>
+
+  <div class="interpretacion">
+    <div class="int-titulo">¿Por qué B conviene a tasas bajas aunque tenga menor TIR?</div>
+    <p>El Proyecto B invierte $5.000 más que A y genera flujos durante 8 años vs 5 años de A. Con tasas bajas, esos flujos lejanos "valen bastante" en VP porque el descuento no los castiga tanto. Con $20.000 comprometidos y 8 períodos de ingresos, el volumen total de VP supera al de A.</p>
+    <p>Con tasas altas (como el 15% de este ejercicio), los flujos lejanos de B se "achican" mucho al descontarlos y dejan de compensar la mayor inversión. A tiene flujos más concentrados en los primeros años, que son menos castigados por el descuento.</p>
+    <p><strong>Moraleja:</strong> la TIR ignora el tamaño del proyecto. B pone más plata en juego. A tasas bajas, más capital genera más valor absoluto aunque el "porcentaje" sea menor. Por eso cuando hay conflicto entre VAN y TIR, siempre gana el VAN: mide plata concreta, no porcentajes.</p>
+  </div>
+
+  <div class="codigo-bloque">
+    <div class="cb-header"><span class="cb-titulo">Código Python — comparación + gráfico del Punto de Fisher</span><span class="cb-lang">PYTHON</span></div>
+    <pre class="cb-code"><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> numpy_financial <span class="kw">as</span> nf
+
+fl_a = [<span class="nu">-15000</span>, <span class="nu">6000</span>, <span class="nu">5000</span>, <span class="nu">4000</span>, <span class="nu">3000</span>, <span class="nu">2000</span>]
+fl_b = [<span class="nu">-20000</span>, <span class="nu">4000</span>, <span class="nu">4000</span>, <span class="nu">4000</span>, <span class="nu">4000</span>, <span class="nu">4000</span>, <span class="nu">4000</span>, <span class="nu">4000</span>, <span class="nu">4000</span>]
+tasa = <span class="nu">0.15</span>
+
+<span class="cm"># Métricas para cada proyecto</span>
+<span class="kw">for</span> nombre, fl <span class="kw">in</span> [(<span class="st">"A"</span>, fl_a), (<span class="st">"B"</span>, fl_b)]:
+    van  = nf.<span class="fn">npv</span>(tasa, fl)
+    tir  = nf.<span class="fn">irr</span>(fl)
+    tirm = nf.<span class="fn">mirr</span>(fl, tasa, tasa)
+    ir   = <span class="fn">sum</span>(f/(<span class="nu">1</span>+tasa)**t <span class="kw">for</span> t,f <span class="kw">in</span> <span class="fn">enumerate</span>(fl[<span class="nu">1</span>:],<span class="nu">1</span>)) / <span class="fn">abs</span>(fl[<span class="nu">0</span>])
+    <span class="bi">print</span>(<span class="st">f"Proyecto {nombre}: VAN=${van:.2f} | TIR={tir:.2%} | TIRM={tirm:.2%} | IR={ir:.2f}"</span>)
+
+<span class="cm"># Gráfico VAN vs tasa para ver el Punto de Fisher</span>
+tasas = np.<span class="fn">arange</span>(<span class="nu">0</span>, <span class="nu">0.20</span>, <span class="nu">0.005</span>)
+van_a = [nf.<span class="fn">npv</span>(t, fl_a) <span class="kw">for</span> t <span class="kw">in</span> tasas]
+van_b = [nf.<span class="fn">npv</span>(t, fl_b) <span class="kw">for</span> t <span class="kw">in</span> tasas]
+
+plt.<span class="fn">figure</span>(figsize=(<span class="nu">10</span>, <span class="nu">6</span>))
+plt.<span class="fn">plot</span>(tasas*<span class="nu">100</span>, van_a, label=<span class="st">'Proyecto A'</span>, linewidth=<span class="nu">2</span>)
+plt.<span class="fn">plot</span>(tasas*<span class="nu">100</span>, van_b, label=<span class="st">'Proyecto B'</span>, linewidth=<span class="nu">2</span>, linestyle=<span class="st">'--'</span>)
+plt.<span class="fn">axhline</span>(<span class="nu">0</span>, color=<span class="st">'red'</span>, linestyle=<span class="st">'--'</span>, linewidth=<span class="nu">0.8</span>, label=<span class="st">'VAN=0'</span>)
+plt.<span class="fn">axvline</span>(<span class="nu">15</span>, color=<span class="st">'gray'</span>, linestyle=<span class="st">':'</span>, label=<span class="st">'r=15%'</span>)
+plt.<span class="fn">xlabel</span>(<span class="st">'Tasa de descuento (%)'</span>)
+plt.<span class="fn">ylabel</span>(<span class="st">'VAN ($)'</span>)
+plt.<span class="fn">title</span>(<span class="st">'Curva VAN — el cruce es el Punto de Fisher (≈11.1%)'</span>)
+plt.<span class="fn">legend</span>(); plt.<span class="fn">grid</span>(<span class="kw">True</span>); plt.<span class="fn">show</span>()</pre>
+    <div class="cb-output">Proyecto A: VAN=-662.21 | TIR=12.75% | TIRM=13.97% | IR=0.96
+Proyecto B: VAN=-2050.71 | TIR=11.81% | TIRM=13.46% | IR=0.90</div>
+  </div>
+
+  <div class="variantes-bloque">
+    <div class="vb-titulo">Variantes posibles para este ejercicio</div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si la tasa fuera 8% en vez de 15%?</div>
+      <div class="vi-respuesta">Con r = 8% (menor al Punto de Fisher ≈ 11.1%), ambos proyectos tendrían VAN positivo y el Proyecto B sería preferible (mayor VAN absoluto). El mismo par de proyectos, con otra tasa, da una conclusión opuesta. Esto demuestra por qué la elección de la tasa de descuento es tan crítica.</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Cómo calcular el Punto de Fisher exactamente?</div>
+      <div class="vi-respuesta">Se construye la diferencia de flujos A − B por período y se calcula la TIR de esa diferencia. Esa TIR es el Punto de Fisher.</div>
+      <div class="vi-formula">diff = [f_a - f_b for f_a, f_b in zip_longest(fl_a, fl_b, fillvalue=0)]
+punto_fisher = nf.irr(diff)  # ≈ 11.1%</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Por qué el PRD no existe en ninguno de los dos con tasa 15%?</div>
+      <div class="vi-respuesta">El PRD no puede existir cuando el VAN es negativo. Matemáticamente: el VAN es la suma de todos los flujos descontados incluyendo la inversión. Si esa suma es negativa, significa que los flujos descontados acumulados nunca llegan a cubrir la inversión. PRD y VAN están perfectamente correlacionados: si VAN &lt; 0, PRD = no existe. Si VAN ≥ 0, PRD existe dentro del horizonte del proyecto.</div>
+    </div>
+
+    <div class="variante-item">
+      <div class="vi-pregunta">¿Y si los proyectos no son excluyentes (podés hacer ambos)?</div>
+      <div class="vi-respuesta">Si el capital es ilimitado y los proyectos no son mutuamente excluyentes, la pregunta ya no es "¿cuál?" sino "¿alguno conviene?". Con r=15% la respuesta es que ninguno conviene de forma individual. Si fueran proyectos independientes con VAN positivo, harías ambos.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep">
+
+<div style="background: var(--paper-warm); border: 1px solid var(--line); border-radius: 8px; padding: 28px 32px; margin-bottom: 40px;">
+  <div style="font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 16px;">Guía de identificación rápida</div>
+  <p style="font-size: 14px; margin-bottom: 12px;"><strong>¿Cómo saber qué fórmula usar?</strong> Mirá qué tipo de información tenés y qué necesitás:</p>
+  <table class="tabla-datos" style="margin-top: 8px;">
+    <tr><th>Tengo...</th><th>Necesito...</th><th>Uso...</th></tr>
+    <tr><td>TNA y quiero la tasa del período</td><td>Tasa efectiva de n días</td><td class="td-mono">Proporción: TNA × (n/365)</td></tr>
+    <tr><td>Tasa efectiva de un período</td><td>Tasa efectiva de otro período</td><td class="td-mono">Equivalencia: (1+i)^(t2/t1) − 1</td></tr>
+    <tr><td>Capital inicial, tasa, períodos</td><td>Cuánto tendré al final</td><td class="td-mono">VF = C0 × (1+i)^n</td></tr>
+    <tr><td>Monto futuro, tasa, períodos</td><td>Cuánto vale hoy</td><td class="td-mono">VP = Cn / (1+i)^n</td></tr>
+    <tr><td>Lista de flujos + tasa de descuento</td><td>¿El proyecto crea valor?</td><td class="td-mono">VAN = Σ [Ft/(1+r)^t] − I0</td></tr>
+    <tr><td>Lista de flujos</td><td>¿A qué tasa empata? ¿Cuánto rinde?</td><td class="td-mono">TIR: nf.irr(flujos)</td></tr>
+    <tr><td>Lista de flujos + tasa realista</td><td>TIR sin supuesto optimista</td><td class="td-mono">TIRM: nf.mirr(flujos, r, r)</td></tr>
+    <tr><td>VP de flujos futuros + inversión</td><td>Valor por peso invertido</td><td class="td-mono">IR = VP_futuros / I0</td></tr>
+    <tr><td>Lista de flujos</td><td>¿Cuándo recupero sin descontar?</td><td class="td-mono">PRS: acumular hasta cubrir I0</td></tr>
+    <tr><td>Lista de flujos + tasa</td><td>¿Cuándo recupero descontando?</td><td class="td-mono">PRD: acumular VPs hasta cubrir I0</td></tr>
+  </table>
+</div>
+
+</div><!-- fin contenido -->
+
+<div class="pie">
+  Laboratorio de Métodos Cuantitativos Aplicados a la Gestión · Ejercicios resueltos Clases 16–17
+</div>
+
+</body>
+</html>
